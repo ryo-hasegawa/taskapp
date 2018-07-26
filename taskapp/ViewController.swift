@@ -71,11 +71,6 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
     // Delete ボタンが押された時に呼ばれるメソッド
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            // データベースから削除する  // ←以降追加する
-            try! realm.write {
-                self.realm.delete(self.taskArray[indexPath.row])
-                tableView.deleteRows(at: [indexPath], with: .fade)
-            }
             if editingStyle == .delete {
             // データベースから削除する  // ←以降追加する
             try! realm.write {
