@@ -15,6 +15,7 @@ class InputViewController: UIViewController {
     @IBOutlet weak var contentsTextView: UITextView!
     @IBOutlet weak var datePicker: UIDatePicker!
     
+    @IBOutlet weak var category: UITextField!
     var task: Task!   // 追加する
     let realm = try! Realm()
     
@@ -29,6 +30,7 @@ class InputViewController: UIViewController {
         titleTextField.text = task.title
         contentsTextView.text = task.contents
         datePicker.date = task.date
+        category.text = task.category
     }
     
     @objc func dismissKeyboard(){
@@ -46,6 +48,8 @@ class InputViewController: UIViewController {
         try! realm.write {
             self.task.title = self.titleTextField.text!
             self.task.contents = self.contentsTextView.text
+            //カテゴリーの入力
+            self.task.category = self.category.text!
             self.task.date = self.datePicker.date
             self.realm.add(self.task, update: true)
             

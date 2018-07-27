@@ -17,6 +17,9 @@ class Task: Object {
     // 内容
     @objc dynamic var contents = ""
     
+    //カテゴリ 2018/07/26課題制作にて追加
+    @objc dynamic var category = ""
+    
     /// 日時
     @objc dynamic var date = Date()
     
