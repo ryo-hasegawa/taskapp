@@ -15,7 +15,10 @@ class InputViewController: UIViewController {
     @IBOutlet weak var contentsTextView: UITextView!
     @IBOutlet weak var datePicker: UIDatePicker!
     
-    @IBOutlet weak var category: UITextField!
+    @IBAction func categorySegue(_ sender: Any) {
+    }
+    
+    @IBOutlet weak var categoryPicker: UIPickerView!
     var task: Task!   // 追加する
     let realm = try! Realm()
     
@@ -30,7 +33,6 @@ class InputViewController: UIViewController {
         titleTextField.text = task.title
         contentsTextView.text = task.contents
         datePicker.date = task.date
-        category.text = task.category
     }
     
     @objc func dismissKeyboard(){
@@ -45,15 +47,14 @@ class InputViewController: UIViewController {
     }
     
     override func viewWillDisappear(_ animated: Bool) {
+        //Taskへのデータ渡し部分
         try! realm.write {
             self.task.title = self.titleTextField.text!
             self.task.contents = self.contentsTextView.text
-            //カテゴリーの入力
-            self.task.category = self.category.text!
             self.task.date = self.datePicker.date
             self.realm.add(self.task, update: true)
             
-             setNotification(task: task)   // 追加
+            setNotification(task: task)   // 追加
         }
         
         super.viewWillDisappear(animated)
