@@ -10,14 +10,17 @@ import UIKit
 import RealmSwift
 import UserNotifications
 
-class InputViewController: UIViewController {
+class InputViewController: UIViewController,UIPickerViewDelegate,UIPickerViewDataSource{
     @IBOutlet weak var titleTextField: UITextField!
     @IBOutlet weak var contentsTextView: UITextView!
     @IBOutlet weak var datePicker: UIDatePicker!
     
     @IBOutlet weak var categoryPicker: UIPickerView!
     var task: Task!   // 追加する
+    
     let realm = try! Realm()
+    //テーブルの読み込み
+    let arrays = try! Realm().objects(Category.self).sorted(byKeyPath: "id")
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,6 +35,11 @@ class InputViewController: UIViewController {
         titleTextField.text = task.title
         contentsTextView.text = task.contents
         datePicker.date = task.date
+        categoryPicker.delegate = self
+        categoryPicker.dataSource = self
+        
+        
+        
     }
     
     @objc func dismissKeyboard(){
@@ -44,6 +52,30 @@ class InputViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    //categoryPickerdatasourceのプロトコル
+    
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    //行数の指定
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return arrays.count
+    }
+    //表示する文字列
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return arrays[row].category
+    }
+    //選択された時の処理
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+    }
+    
+    // 入力画面から戻ってきた時に categorypicker を更新させる
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        categoryPicker.selectRow(task.categoryId, inComponent: 0, animated: false)
+        categoryPicker.reloadAllComponents()
+    }
+   
     
     override func viewWillDisappear(_ animated: Bool) {
         //Taskへのデータ渡し部分
