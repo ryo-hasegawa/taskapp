@@ -75,7 +75,7 @@ class InputViewController: UIViewController,UIPickerViewDelegate,UIPickerViewDat
         categoryPicker.selectRow(task.categoryId, inComponent: 0, animated: false)
         categoryPicker.reloadAllComponents()
     }
-   
+    
     
     override func viewWillDisappear(_ animated: Bool) {
         //Taskへのデータ渡し部分
@@ -83,6 +83,10 @@ class InputViewController: UIViewController,UIPickerViewDelegate,UIPickerViewDat
             self.task.title = self.titleTextField.text!
             self.task.contents = self.contentsTextView.text
             self.task.date = self.datePicker.date
+            if arrays.count != 0 {
+                let row = categoryPicker.selectedRow(inComponent: 0)
+                self.task.categoryId = arrays[row].id
+            }
             self.realm.add(self.task, update: true)
             
             setNotification(task: task)   // 追加

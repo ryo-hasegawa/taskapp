@@ -10,16 +10,19 @@ import UIKit
 import RealmSwift
 import UserNotifications
 
-class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource,UISearchBarDelegate{
+class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource,UIPickerViewDataSource,UIPickerViewDelegate{
     @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var searchBar: UISearchBar!
+    @IBOutlet weak var categorySelector: UIPickerView!
+    
     // Realmインスタンスを取得する
     let realm = try! Realm()  // ←追加
-    
+    let category = Category()
     // DB内のタスクが格納されるリスト。
     // 日付近い順\順でソート：降順
     // 以降内容をアップデートするとリスト内は自動的に更新される。
     var taskArray = try! Realm().objects(Task.self).sorted(byKeyPath: "date", ascending: false)  // ←追加
+    //カテゴリー配列
+    let arrays = try! Realm().objects(Category.self).sorted(byKeyPath: "id")
     
     
     override func viewDidLoad() {
@@ -27,7 +30,8 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
         // Do any additional setup after loading the view, typically from a nib.
         tableView.delegate = self
         tableView.dataSource = self
-        searchBar.delegate = self
+        categorySelector.delegate = self
+        categorySelector.dataSource = self
     }
     
     override func didReceiveMemoryWarning() {
@@ -124,23 +128,37 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         tableView.reloadData()
+        categorySelector.reloadAllComponents()
     }
-    //検索ボタンを押した時のメソッド
-    func searchBar(_ SearchBar: UISearchBar, textDidChange searchText: String) {
-        //SearchBar.endEditing(true)
+    //categoryPickerdatasourceのプロトコル
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    //行数の指定
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return arrays.count
+    }
+    //表示する文字列
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return arrays[row].category
+    }
+    //選択された時の処理
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        //searchbarの時と同じ処理
+        let tmpCategoryId = arrays[row].id
         
-        if(searchBar.text!.isEmpty) {
-            taskArray = try! Realm().objects(Task.self).sorted(byKeyPath: "date", ascending: true)
-            tableView.reloadData()
-        } else {
-            taskArray = try! Realm().objects(Task.self).sorted(byKeyPath: "date", ascending:true).filter("category CONTAINS %@", searchBar.text!)
-            tableView.reloadData()
+        if tmpCategoryId == 0 {
+            taskArray = try! Realm().objects(Task.self).sorted(byKeyPath: "date", ascending: false)
         }
+        else {
+            let nsPredicate01: NSPredicate = NSPredicate( format: "categoryId == \(tmpCategoryId)" )
+            taskArray = try! Realm().objects(Task.self).sorted(byKeyPath: "date", ascending: false).filter(nsPredicate01)
+        }
+        
+        tableView.reloadData()
+        
     }
-    //キャンセルボタン押した時
-    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        view.endEditing(true)
-    }
+    
 }
 
 
