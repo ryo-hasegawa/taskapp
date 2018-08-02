@@ -83,7 +83,7 @@ class CategoryViewController: UIViewController,UITableViewDelegate,UITableViewDa
             //self.category.id = categoryarray.max(ofProperty: "id")! + 1}
             self.category.category = categoryField.text!
             self.category.id = categoryarray.max(ofProperty: "id")! + 1
-            self.realm.add(self.category, update: false)
+            self.realm.add(self.category, update: true)
         //データ渡しテスト
         print(" \(self.category.category)")
         categoryTable.reloadData()
