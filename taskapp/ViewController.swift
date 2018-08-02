@@ -136,11 +136,12 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
     }
     //行数の指定
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return arrays.count
+        return arrays.count + 1
     }
     //表示する文字列
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return arrays[row].category
+        if row == 0 {return ""}
+        return arrays[row - 1].category
     }
     //選択された時の処理
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {

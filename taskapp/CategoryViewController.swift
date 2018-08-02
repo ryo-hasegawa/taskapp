@@ -16,7 +16,7 @@ class CategoryViewController: UIViewController,UITableViewDelegate,UITableViewDa
     @IBOutlet weak var categoryField: UITextField!
     @IBOutlet weak var categoryTable: UITableView!
     //カテゴリークラスを取得しておく
-    var category = Category()
+    
     let realm = try! Realm()
     // DB内のカテゴリが格納されるリスト。
     var categoryarray = try! Realm().objects(Category.self).sorted(byKeyPath: "id",ascending: false)
@@ -77,15 +77,19 @@ class CategoryViewController: UIViewController,UITableViewDelegate,UITableViewDa
     //保存が押された時のアクション
     @IBAction func saveButton(_ sender: Any) {
         //print(categoryField.text!)
+         let category = Category()
+        
         //テキストフィールドの内容をCategory.swiftに渡す
         try! realm.write {
             
-            //self.category.id = categoryarray.max(ofProperty: "id")! + 1}
-            self.category.category = categoryField.text!
-            self.category.id = categoryarray.max(ofProperty: "id")! + 1
-            self.realm.add(self.category, update: true)
+            
+            category.category = categoryField.text!
+            if categoryarray.count != 0 {
+                category.id = categoryarray.count + 1}
+            
+            self.realm.add(category, update: true)
         //データ渡しテスト
-        print(" \(self.category.category)")
+        print(" \(category.category)")
         categoryTable.reloadData()
         
         }
