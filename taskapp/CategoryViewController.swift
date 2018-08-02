@@ -79,14 +79,16 @@ class CategoryViewController: UIViewController,UITableViewDelegate,UITableViewDa
         //print(categoryField.text!)
         //テキストフィールドの内容をCategory.swiftに渡す
         try! realm.write {
+            
+            //self.category.id = categoryarray.max(ofProperty: "id")! + 1}
             self.category.category = categoryField.text!
-            if categoryarray.count != 0 {
-                self.category.id = categoryarray.max(ofProperty: "id")! + 1}
-            self.realm.add(self.category, update: true)
-        }
+            self.category.id = categoryarray.max(ofProperty: "id")! + 1
+            self.realm.add(self.category, update: false)
         //データ渡しテスト
         print(" \(self.category.category)")
         categoryTable.reloadData()
+        
+        }
         
     }
     

@@ -19,7 +19,7 @@ class InputViewController: UIViewController,UIPickerViewDelegate,UIPickerViewDat
     var task: Task!   // 追加する
     
     let realm = try! Realm()
-    //テーブルの読み込み
+    //カテゴリー配列の読み込み
     let arrays = try! Realm().objects(Category.self).sorted(byKeyPath: "id")
     
     override func viewDidLoad() {
