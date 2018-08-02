@@ -65,8 +65,8 @@ class InputViewController: UIViewController,UIPickerViewDelegate,UIPickerViewDat
     //表示する文字列
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         if row == 0 {return ""}
-        
-        return arrays[row - 1].category
+            
+        else{return arrays[row - 1].category}
     }
     //選択された時の処理
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
@@ -86,9 +86,9 @@ class InputViewController: UIViewController,UIPickerViewDelegate,UIPickerViewDat
             self.task.title = self.titleTextField.text!
             self.task.contents = self.contentsTextView.text
             self.task.date = self.datePicker.date
-            if arrays.count != 0 {
-                let row = categoryPicker.selectedRow(inComponent: 0)
-                self.task.categoryId = arrays[row].id
+            let row = categoryPicker.selectedRow(inComponent: 0)
+            if row > 0{
+                self.task.categoryId = arrays[row-1].id
             }
             self.realm.add(self.task, update: true)
             
