@@ -136,22 +136,28 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
     }
     //行数の指定
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return arrays.count
+        return arrays.count + 1
     }
     //表示する文字列
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        if row == 0 {return ""}
-        else {return arrays[row - 1].category}
+        if row == 0 {
+            return ""
+            
+        }
+        else {
+            return arrays[row - 1].category
+            
+        }
     }
     //選択された時の処理
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         //searchbarの時と同じ処理
-        let tmpCategoryId = arrays[row].id
         
         if row > 0 {
-                let nsPredicate01: NSPredicate = NSPredicate( format: "categoryId == \(tmpCategoryId)" )
+            let tmpCategoryId = arrays[row - 1].id
+            let nsPredicate01: NSPredicate = NSPredicate( format: "categoryId == \(tmpCategoryId)" )
             taskArray = try! Realm().objects(Task.self).sorted(byKeyPath: "date", ascending: false).filter(nsPredicate01)}
-        
+            
         else{taskArray = try! Realm().objects(Task.self).sorted(byKeyPath: "date", ascending: false)}
         tableView.reloadData()
         
