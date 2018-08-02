@@ -141,14 +141,14 @@ class ViewController: UIViewController,UITableViewDelegate,UITableViewDataSource
     //表示する文字列
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         if row == 0 {return ""}
-        else {return arrays[row].category}
+        else {return arrays[row - 1].category}
     }
     //選択された時の処理
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         //searchbarの時と同じ処理
         let tmpCategoryId = arrays[row].id
         
-        if tmpCategoryId > 0 {
+        if row > 0 {
                 let nsPredicate01: NSPredicate = NSPredicate( format: "categoryId == \(tmpCategoryId)" )
             taskArray = try! Realm().objects(Task.self).sorted(byKeyPath: "date", ascending: false).filter(nsPredicate01)}
         
